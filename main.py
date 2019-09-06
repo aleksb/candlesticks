@@ -21,7 +21,17 @@ font_name = 'serif' # or None for the default font
 font_px = 32
 my_font = pygame.font.SysFont(font_name, font_px)
 
+## do we need this __main__ thing???
+'''
+if __name__ == "__main__":
+   parser = argparse.ArgumentParser()
+   parser.add_argument('s', help='The start date in format: YYYY-MM')
+   parser.add_argument('e', help='The end date in format: YYYY-MM')
+   args = parser.parse_args()
 
+   start_date = args.s
+   end_date = args.e
+'''
 #### Game loop ####
 
 running = True
