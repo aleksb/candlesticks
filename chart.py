@@ -23,12 +23,34 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect):
        * chart_data formatted as described in README.md.
        * drawing_rect is (x, y, w, h)
     """
-    data = json.loads(SAMPLE_DATA)
-    print(data)
-    pygame.init()
     high_line = ((data["price_history"][0]['high'], 120), (data["price_history"][0]['close'], 100))
-    stock_data = (80, 150 + data["price_history"][0]['close'], 40, data["price_history"][0]['open'] - data["price_history"][0]['close'])
+    candlestick_points = (
+        80, 150 + chart_data["price_history"][0]['close'], 40,
+        data["price_history"][0]['open'] - chart_data["price_history"][0]['close']
+    )
+    screen.fill(WHITE)
+    pygame.draw.rect(screen, BLACK, drawing_rect, 5)
+    pygame.draw.rect(screen, BLACK, candlestick_points)
+    # draw_candlestick(screen, False, stock_data)
+    title = my_font.render(
+        f'Stock Prices for {data["ticker_symbol"]}', True, BLACK)
+    y_subtitle = my_font.render(
+        f'Min and Max Price ($)', True, BLACK)
+    y_subtitle = pygame.transform.rotate(y_subtitle, 90)
+    x_subtitle = my_font.render(
+        'Date Range - Daily', True, BLACK
+    )
+    screen.blit(title, (430, 50))
+    screen.blit(x_subtitle, (430, 680))
+    screen.blit(y_subtitle, (40, 300))
+    pygame.display.flip()
 
+# other defs can go here
+
+
+if __name__ == "__main__":
+    data = json.loads(SAMPLE_DATA)
+    pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     my_font = pygame.font.SysFont('Noto Sans', 18)
@@ -38,25 +60,4 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect):
             if event.type == QUIT:
                 running = False
                 pygame.quit()
-        screen.fill(WHITE)
-        pygame.draw.rect(screen, BLACK, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 5)
-        pygame.draw.rect(screen, BLACK, stock_data)
-
-        #draw_candlestick(screen, False, stock_data)
-        title = my_font.render(
-            f'Stock Prices for {data["ticker_symbol"]}', True, BLACK)
-        screen.blit(title, (430, 50))
-        y_subtitle = my_font.render(
-            f'Min and Max Price ($)', True, BLACK)
-        y_subtitle = pygame.transform.rotate(y_subtitle, 90)
-        x_subtitle = my_font.render(
-            'Date Range - Daily', True, BLACK
-        )
-        screen.blit(x_subtitle, (430, 680))
-        screen.blit(y_subtitle, (40, 300))
-        pygame.display.flip()
-
-draw_candlestick_chart(None, None, None)
-# other defs can go here
-
-
+        draw_candlestick_chart(screen, data, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
