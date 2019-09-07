@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Creates a PyGame window and co-ordinates the fetching of data and
    drawing a chart"""
+import argparse
 import pygame
 import sys
 import config as config
@@ -21,51 +22,42 @@ font_name = 'serif' # or None for the default font
 font_px = 32
 my_font = pygame.font.SysFont(font_name, font_px)
 
-## do we need this __main__ thing???
-'''
+##
+## Main Program
+##
 if __name__ == "__main__":
+   ## Take Company Name, Start Date and End Date from the command line at runtime
    parser = argparse.ArgumentParser()
-   parser.add_argument('s', help='The start date in format: YYYY-MM')
-   parser.add_argument('e', help='The end date in format: YYYY-MM')
+   parser.add_argument('-n', help='The company name')
+   parser.add_argument('-s', help='The start date in format: YYYY-MM')
+   parser.add_argument('-e', help='The end date in format: YYYY-MM')
    args = parser.parse_args()
 
+   company_name = args.n
    start_date = args.s
    end_date = args.e
-'''
-#### Game loop ####
 
+## Get chart data in nice python format
+chart_data = import_stock_prices(company_name, start_date, end_date)
+
+## Draw screen background
+screen.fill(config.WHITE)
+
+## Draw chart
+drawing_rect = (0,0,config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
+draw_candlestick_chart(screen, chart_data, drawing_rect, my_font)
+
+## After drawing, make the drawing visible
+pygame.display.flip()
+
+## Event Handling Loop
 running = True
 while running:
-
    clock.tick(FPS)
-
-   #### Game loop part 1: Event handling #####
-
    for event in pygame.event.get():
-
       if event.type == pygame.QUIT:
             running = False
             break
 
-      ## what is this event?
-      company = "AAPL"
-      start_date = "2014-06"
-      end_date = "2014-06"
-      chart_data = import_stock_prices(company, start_date, end_date)
-
-   #### Game loop part 2: Updates #####
-
-   #### Game loop part 3: Draw #####
-   screen.fill(config.WHITE)
-
-   # call chart:
-   drawing_rect = (0,0,config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
-   draw_candlestick_chart(screen, chart_data, drawing_rect)
-
-   # after drawing, make the drawing visible
-   pygame.display.flip()
-
-#### Clean up and close program ####
-
-# close the window
+## Clean up and close program
 pygame.quit()
