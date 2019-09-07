@@ -62,7 +62,7 @@ while running:
 
    # call chart:
    drawing_rect = (0,0,config.SCREEN_WIDTH, config.SCREEN_HEIGHT)
-   draw_candlestick_chart(screen, chart_data, drawing_rect)
+   draw_candlestick_chart(screen, chart_data, drawing_rect, my_font)
 
    # after drawing, make the drawing visible
    pygame.display.flip()

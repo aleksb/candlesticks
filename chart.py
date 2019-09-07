@@ -16,14 +16,13 @@ from candlestick import (
 from axes import draw_x_axis, draw_y_axis
 SAMPLE_DATA = '{"symbol": "EXPL", "historical": [{"open": 14.0,"close": 14.1,"low": 15.0,"high": 14.0,"date": ""}]}'
 
-def draw_candlestick_chart(screen, chart_data, drawing_rect):
+def draw_candlestick_chart(screen, chart_data, drawing_rect, my_font):
     """
     draws a candlestick chart at a particular position
        * screen is a PyGame surface
        * chart_data formatted as described in README.md.
        * drawing_rect is (x, y, w, h)
     """
-    my_font = pygame.font.SysFont('Noto Sans', 18)
     high_line = ((chart_data["historical"][0]['high'], 120), (chart_data["historical"][0]['close'], 100))
     candlestick_points = (
         80, 150 + chart_data["historical"][0]['close'], 40,
@@ -51,6 +50,7 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect):
 
 if __name__ == "__main__":
     pygame.init()
+    my_font = pygame.font.SysFont('sans', 18)
     data = json.loads(SAMPLE_DATA)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
@@ -59,5 +59,6 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
-                pygame.quit()
-        draw_candlestick_chart(screen, data, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
+
+        draw_candlestick_chart(screen, data, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), my_font)
+    pygame.quit()
