@@ -14,7 +14,7 @@ from candlestick import (
     draw_candlestick
 )
 from axes import draw_x_axis, draw_y_axis
-SAMPLE_DATA = '{"ticker_symbol": "EXPL", "price_history": [{"open": 14.0,"close": 14.1,"low": 15.0,"high": 14.0,"date": ""}]}'
+SAMPLE_DATA = '{"symbol": "EXPL", "historical": [{"open": 14.0,"close": 14.1,"low": 15.0,"high": 14.0,"date": ""}]}'
 
 def draw_candlestick_chart(screen, chart_data, drawing_rect):
     """
@@ -23,17 +23,18 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect):
        * chart_data formatted as described in README.md.
        * drawing_rect is (x, y, w, h)
     """
-    high_line = ((data["price_history"][0]['high'], 120), (data["price_history"][0]['close'], 100))
+    my_font = pygame.font.SysFont('Noto Sans', 18)
+    high_line = ((chart_data["historical"][0]['high'], 120), (chart_data["historical"][0]['close'], 100))
     candlestick_points = (
-        80, 150 + chart_data["price_history"][0]['close'], 40,
-        data["price_history"][0]['open'] - chart_data["price_history"][0]['close']
+        80, 150 + chart_data["historical"][0]['close'], 40,
+        chart_data["historical"][0]['open'] - chart_data["historical"][0]['close']
     )
     screen.fill(WHITE)
     pygame.draw.rect(screen, BLACK, drawing_rect, 5)
     pygame.draw.rect(screen, BLACK, candlestick_points)
     # draw_candlestick(screen, False, stock_data)
     title = my_font.render(
-        f'Stock Prices for {data["ticker_symbol"]}', True, BLACK)
+        f'Stock Prices for {chart_data["symbol"]}', True, BLACK)
     y_subtitle = my_font.render(
         f'Min and Max Price ($)', True, BLACK)
     y_subtitle = pygame.transform.rotate(y_subtitle, 90)
@@ -49,15 +50,13 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect):
 
 
 if __name__ == "__main__":
-    data = json.loads(SAMPLE_DATA)
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
-    my_font = pygame.font.SysFont('Noto Sans', 18)
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
                 pygame.quit()
-        draw_candlestick_chart(screen, data, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
+        draw_candlestick_chart(screen, SAMPLE_DATA, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))

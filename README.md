@@ -7,8 +7,8 @@ Drawing candlestick charts in PyGame
 
 
     {
-      "ticker_symbol": "EXPL",
-      "price_history": [
+      "symbol": "EXPL",
+      "historical": [
         {
           "open": 14.0,
           "close": 14.1,
