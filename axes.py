@@ -13,7 +13,14 @@ def draw_x_axis(screen, x, y, w, start_date, end_date):
        note that (end_date - start_date) is the number of days
        in that period
        """
-       pass
+       pygame.draw.line(screen, BLACK, True, (x,y), (w,y), 2)
+       text_start_date = my_font.render(f"{start_date}", True, BLACK)
+       text_end_date = my_font.render(f"{end_date}", True, BLACK)
+       text_start_date = pygame.transform.rotate(text_start_date, 90)
+       text_end_date = pygame.transform.rotate(text_end_date, 90)
+       screen.blit(text_start_date, (x,y))
+       screen.blit(text_end_date, (w,y))
+       num_candlesticks = (end_date - start_date).days
        
 
 
