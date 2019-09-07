@@ -25,7 +25,21 @@ for data in dump:
         try:
             lowsum.append(dump['historical'][count]['low'])
             count += 1
-            print(sum(lowsum) / count)
+            final_dict = {
+                'ticker_symbol': dump['symbol'],
+                'price_history': [
+                    {
+                        'open': dump['historical'][count]['open'],
+                        'close': dump['historical'][count]['close'],
+                        'low': dump['historical'][count]['low'],
+                        'high': dump['historical'][count]['high'],
+                        'date': dump['historical'][count]['label'],
+                    }
+                ]
+            }
+
+            print(final_dict)
+            # print(sum(lowsum) / count)
         except:
             break
 
