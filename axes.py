@@ -1,7 +1,7 @@
 
 
 def draw_x_axis(screen, x, y, w, start_date, end_date):
-    """Draws the x axis
+       """Draws the x axis
        
        * screen
        * x - origin x
@@ -13,14 +13,29 @@ def draw_x_axis(screen, x, y, w, start_date, end_date):
        note that (end_date - start_date) is the number of days
        in that period
        """
+       
+
 
 def draw_y_axis(screen, x, y, h, min_price, max_price):
-    """Draws the y axis
+       """Draws the y axis
        
        * screen
        * x - origin x
        * y - origin y
-       * h - width
+       * h - height
        * min_price - in USD
        * max_price - in USD
        """
+       pygame.draw.lines(screen, BLACK , False, [(x,y),(x,h)], 2)
+       text_snippet_min = my_font.render(f"{min_price}", True, BLACK)
+       screen.blit(text_snippet_min, ((x-50), (y+h)))
+       text_snippet_max = my_font.render(f"{max_price}", True, BLACK)
+       screen.blit(text_snippet_max, ((x-50), (y+5)))
+       
+       spread = max_price - min_price
+       
+       text_snippet_mid = my_font.render(f"{max_price-spread/2}", True, BLACK)
+       screen.blit(text_snippet_mid
+       
+              
+
