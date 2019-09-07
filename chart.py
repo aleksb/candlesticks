@@ -51,6 +51,7 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect):
 
 if __name__ == "__main__":
     pygame.init()
+    data = json.loads(SAMPLE_DATA)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     running = True
@@ -59,4 +60,4 @@ if __name__ == "__main__":
             if event.type == QUIT:
                 running = False
                 pygame.quit()
-        draw_candlestick_chart(screen, SAMPLE_DATA, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
+        draw_candlestick_chart(screen, data, (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
