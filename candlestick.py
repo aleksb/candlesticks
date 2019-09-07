@@ -21,7 +21,7 @@ def draw_candlestick(screen, x, y, h, cs_w, stock_info):
        pass
     elif list_cords[0] < list_cords[1]:
        pass
-    elif list_cords[0] = list_cords[1]:
+    elif list_cords[0] == list_cords[1]:
         pass
     pygame.draw.line(screen, (BLACK), (start_pos), (end_pos), 2)
     pygame.draw.rect(screen, (rect_color), (rect_x, rect_y, rect_w, rect_h), 2)

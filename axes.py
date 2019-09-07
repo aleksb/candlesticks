@@ -13,6 +13,7 @@ def draw_x_axis(screen, x, y, w, start_date, end_date):
        note that (end_date - start_date) is the number of days
        in that period
        """
+       pass
        
 
 
@@ -35,7 +36,7 @@ def draw_y_axis(screen, x, y, h, min_price, max_price):
        spread = max_price - min_price
        
        text_snippet_mid = my_font.render(f"{max_price-spread/2}", True, BLACK)
-       screen.blit(text_snippet_mid
+       # screen.blit(text_snippet_mid,())
        
               
 
