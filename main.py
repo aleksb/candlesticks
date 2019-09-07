@@ -34,6 +34,12 @@ if __name__ == "__main__":
 '''
 #### Game loop ####
 
+
+## what is this event?
+company = "AAPL"
+start_date = "2014-06"
+end_date = "2014-06"
+chart_data = import_stock_prices(company, start_date, end_date)
 running = True
 while running:
 
@@ -47,11 +53,7 @@ while running:
             running = False
             break
 
-      ## what is this event?
-      company = "AAPL"
-      start_date = "2014-06"
-      end_date = "2014-06"
-      chart_data = import_stock_prices(company, start_date, end_date)
+
 
    #### Game loop part 2: Updates #####
 
