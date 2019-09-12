@@ -34,7 +34,7 @@ def import_stock_prices(company, start_date, end_date):
         count += 1
         final_dict = {
             'ticker_symbol': dump['symbol'],
-            'price_history': [
+            'price_history':
                 {
                     'open': data['open'],
                     'close': data['close'],
@@ -42,7 +42,6 @@ def import_stock_prices(company, start_date, end_date):
                     'high': data['high'],
                     'date': data['label'],
                 }
-            ]
         }
         stock_list.append(final_dict)
     return stock_list

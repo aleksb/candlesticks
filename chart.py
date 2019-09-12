@@ -28,8 +28,9 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect, my_font):
        * chart_data formatted as described in README.md.
        * drawing_rect is (x, y, w, h)
     """
+    ticker = chart_data[0]['ticker_symbol']
+    history = [item['price_history'] for item in chart_data]
     window = 5
-    historical = chart_data['historical']
     graph = pygame.draw.rect(
         screen,
         BLACK,
@@ -56,7 +57,7 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect, my_font):
     draw_title(
         screen,
         my_font,
-        chart_data["symbol"],
+        ticker,
         graph
     )
 
@@ -71,9 +72,9 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect, my_font):
     xlabels = draw_x_labels(
         screen,
         x_axis,
-        historical
+        history
     )
-    high, low = find_high_low(historical)
+    high, low = find_high_low(history)
 
     y_length = y_axis.bottom - y_axis.top
     # generate appropriate scaling for graph
@@ -87,12 +88,13 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect, my_font):
     for i, label in enumerate(xlabels):
         make_candlestick_demo(
             screen, label,
-            historical[i], y_axis,
+            history[i], y_axis,
             unit, candle_length, high, low
         )
     pygame.display.flip()
 
 def find_high_low(historical):
+    print(historical)
     highest_highs = sorted(
         historical,
         key=itemgetter('high'),
