@@ -91,7 +91,6 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect, my_font):
             history[i], y_axis,
             unit, candle_length, high, low
         )
-    pygame.display.flip()
 
 def find_high_low(historical):
     print(historical)
