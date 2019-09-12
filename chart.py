@@ -83,7 +83,7 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect, my_font):
         y_axis,
         unit
     )
-    candle_length = (xlabels[1].left - xlabels[0].left) / 2
+    candle_length = (xlabels[1].left - xlabels[0].left) / 2 # length between each stroke
     for i, label in enumerate(xlabels):
         make_candlestick_demo(
             screen, label,
