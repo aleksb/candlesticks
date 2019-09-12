@@ -5,12 +5,13 @@ Draws a candlestick chart on a PyGame screen.
 import json
 import pygame
 import datetime
+import math
 from operator import (
     itemgetter
 )
 from pygame.locals import QUIT
 from config import (
-    WHITE, BLACK, UP_CANDLE_COLOUR,
+    WHITE, BLACK, GREEN, RED, UP_CANDLE_COLOUR,
     AVG_LINE_COLOUR, SCREEN_WIDTH, SCREEN_HEIGHT
 )
 from candlestick import (
@@ -27,15 +28,25 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect, my_font):
        * chart_data formatted as described in README.md.
        * drawing_rect is (x, y, w, h)
     """
-    graph = pygame.draw.rect(screen, BLACK, drawing_rect, 5)
+    window = 5
+    historical = chart_data['historical']
+    graph = pygame.draw.rect(
+        screen,
+        BLACK,
+        drawing_rect, window
+    )
 
-    x_xaxis, y_xaxis = get_coordinates(graph, "x_axis")
+    x_xaxis, y_xaxis = get_coordinates(
+        graph, "x_axis"
+    )
 
     x_axis = draw_x_axis_joe(
         screen,
         x_xaxis, y_xaxis,
     )
-    x_yaxis, y_yaxis = get_coordinates(graph, "y_axis")
+    x_yaxis, y_yaxis = get_coordinates(
+        graph, "y_axis"
+    )
 
     y_axis = draw_y_axis_joe(
         screen,
@@ -60,18 +71,89 @@ def draw_candlestick_chart(screen, chart_data, drawing_rect, my_font):
     xlabels = draw_x_labels(
         screen,
         x_axis,
-        chart_data['historical']
+        historical
     )
-    descending_order = sorted(
-        chart_data['historical'],
+    high, low = find_high_low(historical)
+
+    y_length = y_axis.bottom - y_axis.top
+    # generate appropriate scaling for graph
+    unit = y_length / (high - low)
+    y_labels = draw_y_labels(
+        screen,
+        y_axis,
+        unit
+    )
+    candle_length = (xlabels[1].left - xlabels[0].left) / 2
+    for i, label in enumerate(xlabels):
+        make_candlestick_demo(
+            screen, label,
+            historical[i], y_axis,
+            unit, candle_length, high, low
+        )
+    pygame.display.flip()
+
+def find_high_low(historical):
+    highest_highs = sorted(
+        historical,
         key=itemgetter('high'),
         reverse=True
     )
-    print(descending_order[0]['high'])
-    for i, label in enumerate(xlabels):
-        pass # pass this data and the historical to the candles
-    pygame.display.flip()
+    # sort lowest on order
+    lowest_lows = sorted(
+        historical,
+        key=itemgetter('low')
+    )
+    
+    return (
+        highest_highs[0]['high'],
+        lowest_lows[0]['low']
+    )
 
+def make_candlestick_demo(screen, label, stock_data, y_axis, *vals):
+    unit, candle_length, high, low = vals
+    ends_high = stock_data['close'] > stock_data['open']
+    high_point = (
+        stock_data['close']
+        if ends_high
+        else stock_data['open']
+    )
+    low_point = (
+        stock_data['close']
+        if not ends_high
+        else stock_data['open']
+    )
+    line = pygame.draw.line(
+        screen, BLACK,
+        (
+            label.left,
+            y_axis.top + unit * (
+                high - stock_data['high']
+                )
+            ),
+        (
+            label.left,
+            y_axis.top + unit * (
+                high - stock_data['low']
+                )
+            )
+    )
+    color = GREEN if ends_high else RED
+    high_offset = unit * (
+        high - high_point
+    )
+    low_offset = unit * (
+        high - low_point
+    )
+
+    pygame.draw.rect(
+        screen, color,
+        (
+            label.left - candle_length/2,
+            y_axis.top + high_offset,
+            candle_length,
+            low_offset - high_offset
+        )
+    )
 
 def get_coordinates(graph, cooridinates):
     return {
@@ -141,7 +223,7 @@ def draw_x_labels(screen, x_axis, dates):
     stroke = int(x_axis_length / len(dates))
     for value in range(
         x_axis.left + stroke,
-        x_axis_length + stroke,
+        x_axis_length + stroke * 2,
         stroke
     ):
         labels.append(pygame.draw.line(
@@ -150,13 +232,19 @@ def draw_x_labels(screen, x_axis, dates):
             (value, x_axis.bottom + 5)
         ))
     return labels
-def draw_y_labels(screen, y_axis, data, highest_value):
+def draw_y_labels(screen, y_axis, unit):
     """
     draw y labels, these should be returned as rects as well
     """
-    for element in data:
-        element['high']
-        element['low']
+
+    point = y_axis.top
+    for value in range(point, y_axis.bottom, int(unit/2)):
+        pygame.draw.line(
+            screen, BLACK,
+            (y_axis.left, value),
+            (y_axis.left - 10, value)
+        )
+
 
 # change the dict values as recieved from the api
 SAMPLE_DATA = '{"symbol": "EXPL", "historical": [{"open": 14.0,"close": 14.1,"low": 15.0,"high": 14.0,"date": ""}]}'
